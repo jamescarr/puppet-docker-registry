@@ -133,6 +133,9 @@ class docker-registry (
     require        => Python::Virtualenv[$virtualenv],
   }
   
+  file { '/etc/nginx/sites-enabled/default':
+    ensure => absent,
+  }
   nginx::resource::vhost { 'default':
     proxy   => $app,
     ensure  => present,
