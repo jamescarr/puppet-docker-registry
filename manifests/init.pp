@@ -136,11 +136,11 @@ class docker-registry (
     ensure => absent,
   }
 
-  # nginx
+  # pnginx
+  $upstream    = $app
+  $server_name = 'dockerregistry' 
   class { '::nginx':
     template    => 'docker-registry/nginx.conf.erb',
-    upstream    => $app,
-    server_name => 'dockerregistry', 
   }
   nginx::resource::upstream { $app:
     ensure  => present,
