@@ -131,7 +131,6 @@ class docker-registry (
     directory      => $app_dir,
     autorestart    => true,
     require        => Python::Virtualenv[$virtualenv],
-    notify         => Service['supervisor'],
   }
 
   nginx::resource::upstream { $app:
