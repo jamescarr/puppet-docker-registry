@@ -1,5 +1,5 @@
 name    'puppet-docker-registry'
-version '0.0.4'
+version '0.0.5'
 source 'UNKNOWN'
 author 'James R. Carr <james.r.carr@gmail.com>'
 license 'Apache License, Version 2.0'

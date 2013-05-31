@@ -53,7 +53,6 @@ class docker-registry (
 ) {
   include ::git
   include ::supervisor
-  include ::nginx
  
   $app        = 'docker-registry'
   $virtualenv = "/usr/local/lib/virtualenvs/$app"
@@ -120,7 +119,7 @@ class docker-registry (
     mode    => '0644'
   }
   supervisor::service { $app: 
-    command        => "$virtualenv/bin/gunicorn -b 0.0.0.0:5000 -w 1 wsgi:application",
+    command        => "$virtualenv/bin/gunicorn -b 0.0.0.0:5000 -w 5 wsgi:application",
     ensure         => present,
     enable         => true,
     user           => $app_user,
@@ -136,10 +135,12 @@ class docker-registry (
   file { '/etc/nginx/sites-enabled/default':
     ensure => absent,
   }
-  nginx::resource::vhost { 'default':
-    proxy   => $app,
-    ensure  => present,
-    require => Nginx::Resource::Upstream[$app],
+
+  # nginx
+  class { '::nginx':
+    template    => 'docker-registry/nginx.conf.erb',
+    upstream    => $app,
+    server_name => 'dockerregistry', 
   }
   nginx::resource::upstream { $app:
     ensure  => present,
