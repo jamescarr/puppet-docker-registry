@@ -54,7 +54,7 @@ class docker-registry (
   include ::git
   include ::supervisor
   include ::nginx
-  
+ 
   $app        = 'docker-registry'
   $virtualenv = "/usr/local/lib/virtualenvs/$app"
   $app_user   = 'docker_registar'
@@ -75,6 +75,7 @@ class docker-registry (
     virtualenv => true,
     gunicorn   => false,
   }
+
   file { '/usr/local/lib/virtualenvs':
     ensure => directory,
     owner  => $app_user,
@@ -129,6 +130,15 @@ class docker-registry (
     priority       => 10,
     directory      => $app_dir,
     autorestart    => true,
+    require        => Python::Virtualenv[$virtualenv],
+    notify         => Service['supervisor'],
+  }
 
+  nginx::resource::upstream { $app:
+    ensure  => present,
+    members => [
+      'localhost:5000', 
+    ],
+    require => Supervisor::Service[$app],
   }
 }
