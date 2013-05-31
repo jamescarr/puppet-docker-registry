@@ -132,7 +132,12 @@ class docker-registry (
     autorestart    => true,
     require        => Python::Virtualenv[$virtualenv],
   }
-
+  
+  nginx::resource::vhost { 'default':
+    proxy   => $app,
+    ensure  => present,
+    require => Nginx::Resource::Upstream[$app],
+  }
   nginx::resource::upstream { $app:
     ensure  => present,
     members => [
