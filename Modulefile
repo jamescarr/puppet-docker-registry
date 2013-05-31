@@ -9,5 +9,5 @@ project_page 'UNKNOWN'
 
 ## Add dependencies, if any:
 dependency 'example42/puppet-nginx', '>= 2.0.7'
-dependency 'plathrop/puppet-module-supervisor', '*'
+dependency 'jamescarr/puppet-module-supervisor', '0.0.1'
 dependency 'nesi/puppet-git', '>= 0.0.1'
